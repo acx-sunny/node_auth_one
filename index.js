@@ -137,7 +137,6 @@ app.post("/api/v1/auth/login", async (req, res) => {
         const {
             email,
             password,
-            role,
             deviceIP,
             location: { latitude, longitude },
             deviceDetails: { os, osVersion, browser, browserVersion },
@@ -147,6 +146,7 @@ app.post("/api/v1/auth/login", async (req, res) => {
         const user = await userDB.findOne({ email });
         const firstname = user.firstname;
         const lastname = user.lastname;
+        const role = user.role;
 
         console.log("FInd user than print name ", firstname, lastname);
         
@@ -164,16 +164,15 @@ app.post("/api/v1/auth/login", async (req, res) => {
         }
 
         // Check if the user's role matches the provided role
-        if (user.role !== role) {
-            return res.status(401).json({ error: "Role mismatch" });
-        }
+        // if (user.role !== role) {
+        //     return res.status(401).json({ error: "Role mismatch" });
+        // }
 
         // Authentication successful, generate an access token
         const accessToken = jwt.sign(
             {
                 userId: user._id,
                 email: user.email,
-                role: user.role,
             },
             secretKey, // Replace with your actual secret key
             { expiresIn: secretKeyDuration1 + "" }
@@ -218,6 +217,7 @@ app.post("/api/v1/auth/login", async (req, res) => {
             return res.status(200).json({
                 message: "Login successful",
                 username : firstname + " " + lastname,
+                role : role,
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
@@ -248,6 +248,7 @@ app.post("/api/v1/auth/login", async (req, res) => {
         return res.status(200).json({
             message: "Login successful",
             username : firstname + " " + lastname,
+            role : role,
             accessToken: accessToken,
             refreshToken: refreshToken,
         });
