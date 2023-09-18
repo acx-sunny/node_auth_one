@@ -145,7 +145,11 @@ app.post("/api/v1/auth/login", async (req, res) => {
 
         // Find a user with the provided email
         const user = await userDB.findOne({ email });
+        const firstname = user.firstname;
+        const lastname = user.lastname;
 
+        console.log("FInd user than print name ", firstname, lastname);
+        
         // If the user doesn't exist, return an error
         if (!user) {
             return res.status(401).json({ error: "User not found" });
@@ -213,6 +217,7 @@ app.post("/api/v1/auth/login", async (req, res) => {
 
             return res.status(200).json({
                 message: "Login successful",
+                username : firstname + " " + lastname,
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
@@ -242,6 +247,7 @@ app.post("/api/v1/auth/login", async (req, res) => {
 
         return res.status(200).json({
             message: "Login successful",
+            username : firstname + " " + lastname,
             accessToken: accessToken,
             refreshToken: refreshToken,
         });
