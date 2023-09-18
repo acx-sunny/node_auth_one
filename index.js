@@ -1,12 +1,11 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import authRouter from "./routes/auth.route.js";
 
-dotenv.config();
-const PORT = process.env.SERVER_PORT || 4000;
-const mongoURL = process.env.DATABASE_MONGODB_URL;
+import {PORT, mongoURL} from './common.shared.js';
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
